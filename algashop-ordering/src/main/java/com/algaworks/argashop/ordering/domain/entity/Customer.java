@@ -1,5 +1,6 @@
 package com.algaworks.argashop.ordering.domain.entity;
 
+import com.algaworks.argashop.ordering.domain.exception.CustomerArchivedException;
 import com.algaworks.argashop.ordering.domain.validator.FieldValidations;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -60,27 +61,56 @@ public class Customer {
         this.setLoyaltyPoints(loyaltyPoints);
     }
 
-    public void addLoyaltyPoints(Integer points) {}
+    public void addLoyaltyPoints(Integer loyaltyPointsAdded) {
+        verifyIfChangeable();
 
-    public void archive() {}
+        if (loyaltyPointsAdded <= 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.setLoyaltyPoints(this.loyaltyPoints() + loyaltyPointsAdded);
+    }
+
+    public void archive() {
+        verifyIfChangeable();
+
+        this.setArchived(true);
+        this.setArchivedAt(OffsetDateTime.now());
+        this.setFullName("Anonymous");
+        this.setPhone("000-000-0000");
+        this.setDocument("000-00-0000");
+        this.setEmail(UUID.randomUUID().toString() + "@anonymous.com");
+        this.setBirthDate(null);
+        this.setPromotionNotificationsAllowed(false);
+    }
 
     public void enablePromotionNotifications() {
+        verifyIfChangeable();
+
         this.setPromotionNotificationsAllowed(true);
     }
 
     public void disablePromotionNotifications() {
+        verifyIfChangeable();
+
         this.setPromotionNotificationsAllowed(false);
     }
 
     public void changeName(String fullName) {
+        verifyIfChangeable();
+
         this.setFullName(fullName);
     }
 
     public void changeEmail(String email) {
+        verifyIfChangeable();
+
         this.setEmail(email);
     }
 
     public void changePhone(String phone) {
+        verifyIfChangeable();
+
         this.setPhone(phone);
     }
 
@@ -201,7 +231,17 @@ public class Customer {
     private void setLoyaltyPoints(Integer loyaltyPoints) {
         Objects.requireNonNull(loyaltyPoints);
 
+        if (loyaltyPoints < 0) {
+            throw new IllegalArgumentException();
+        }
+
         this.loyaltyPoints = loyaltyPoints;
+    }
+
+    private void verifyIfChangeable() {
+        if(isArchived()) {
+            throw new CustomerArchivedException();
+        }
     }
 
     @Override
