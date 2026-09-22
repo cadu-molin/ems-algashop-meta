@@ -1,7 +1,6 @@
 package com.algaworks.argashop.ordering.domain.entity;
 
 import com.algaworks.argashop.ordering.domain.exception.CustomerArchivedException;
-import com.algaworks.argashop.ordering.domain.utility.IdGenerator;
 import com.algaworks.argashop.ordering.domain.valueobject.*;
 import org.junit.jupiter.api.Test;
 
@@ -16,15 +15,13 @@ class CustomerTest {
     void given_invalidEmail_whenTryCreateCustomer_thenExceptionIsThrown() {
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(()-> {
-                    new Customer(
-                            new CustomerId(),
+                    Customer.brandNew(
                             new FullName("John", "Doe"),
-                            LocalDate.of(1991, 7, 5),
+                            new BirthDate(LocalDate.of(1991, 7, 5)),
                             new Email("invalid"),
                             new Phone("478-256-2504"),
                             new Document("255-08-0578"),
                             false,
-                            OffsetDateTime.now(),
                             Address.builder()
                                     .street("Bourbon Street")
                                     .number("1134")
@@ -40,15 +37,13 @@ class CustomerTest {
 
     @Test
     void given_invalidEmail_whenTryUpdatedCustomerEmail_shouldGenerateException() {
-        Customer customer = new Customer(
-                new CustomerId(),
+        Customer customer = Customer.brandNew(
                 new FullName("John", "Doe"),
-                LocalDate.of(1991, 7, 5),
+                new BirthDate(LocalDate.of(1991, 7, 5)),
                 new Email("john.doe@gmail.com"),
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now(),
                 Address.builder()
                         .street("Bourbon Street")
                         .number("1134")
@@ -68,15 +63,13 @@ class CustomerTest {
 
     @Test
     void given_unarchivedCustomer_whenArchive_shouldAnonymize() {
-        Customer customer = new Customer(
-                new CustomerId(),
+        Customer customer = Customer.brandNew(
                 new FullName("John", "Doe"),
-                LocalDate.of(1991, 7, 5),
+                new BirthDate(LocalDate.of(1991, 7, 5)),
                 new Email("john.doe@gmail.com"),
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now(),
                 Address.builder()
                         .street("Bourbon Street")
                         .number("1134")
@@ -113,7 +106,7 @@ class CustomerTest {
 
     @Test
     void given_archivedCustomer_whenTryToUpdate_sholdGenerateException() {
-        Customer customer = new Customer(
+        Customer customer = Customer.existing(
                 new CustomerId(),
                 new FullName("Anonymous", "Anonymous"),
                 null,
@@ -145,15 +138,13 @@ class CustomerTest {
 
     @Test
     void given_brandNewCustomer_whenAddLoyaltyPoints_shouldSumPoints() {
-        Customer customer = new Customer(
-                new CustomerId(),
+        Customer customer = Customer.brandNew(
                 new FullName("John", "Doe"),
-                LocalDate.of(1991, 7, 5),
+                new BirthDate(LocalDate.of(1991, 7, 5)),
                 new Email("john.doe@gmail.com"),
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now(),
                 Address.builder()
                         .street("Bourbon Street")
                         .number("1134")
@@ -173,15 +164,13 @@ class CustomerTest {
 
     @Test
     void given_brandNewCustomer_whenAddInvalidLoyaltyPoints_shouldGenerateException() {
-        Customer customer = new Customer(
-                new CustomerId(),
+        Customer customer = Customer.brandNew(
                 new FullName("John", "Doe"),
-                LocalDate.of(1991, 7, 5),
+                new BirthDate(LocalDate.of(1991, 7, 5)),
                 new Email("john.doe@gmail.com"),
                 new Phone("478-256-2504"),
                 new Document("255-08-0578"),
                 false,
-                OffsetDateTime.now(),
                 Address.builder()
                         .street("Bourbon Street")
                         .number("1134")
