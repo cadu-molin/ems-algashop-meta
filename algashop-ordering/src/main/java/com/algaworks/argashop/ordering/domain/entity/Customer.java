@@ -1,14 +1,13 @@
 package com.algaworks.argashop.ordering.domain.entity;
 
 import com.algaworks.argashop.ordering.domain.exception.CustomerArchivedException;
-import com.algaworks.argashop.ordering.domain.validator.FieldValidations;
 import com.algaworks.argashop.ordering.domain.valueobject.*;
+import com.algaworks.argashop.ordering.domain.valueobject.id.CustomerId;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
